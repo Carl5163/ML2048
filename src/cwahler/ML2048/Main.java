@@ -19,20 +19,27 @@ public class Main {
         ERROR
 
     }
-    private static final boolean humanPlayer = true;
+
+    //General Parameters
+    private static boolean humanPlayer = true;
+
+    //Game Parameters
+    private static int score = 0;
+    private static int size = 4;
+
+    //Neural Net and Gen Alg Params
+    private NeuralNetParams nParams;
+    private GeneticAlgParams gParams;
+    private Population pop;
 
     private Tile[] grid;
-    private int score;
-    private int size;
 
     public static void main(String[] args) {
         new Main();
     }
 
-    private Main() {
 
-        size = 4;
-        score = 0;
+    private Main() {
 
         newGame();
         printBoard();
@@ -64,6 +71,12 @@ public class Main {
             }
 
             System.out.println("Quitting...");
+        } else {
+            nParams = new NeuralNetParams(3, size*size, 1, 4);
+            gParams = new GeneticAlgParams(100, .05, .01, .4);
+
+            pop = new Population(nParams, gParams);
+
         }
 
     }
@@ -249,7 +262,6 @@ public class Main {
 
     }
 
-
     private boolean getGameLost() {
         boolean lost = true;
 
@@ -283,7 +295,6 @@ public class Main {
         }
         return lost;
     }
-
 
     private void newGame() {
         score = 0;
