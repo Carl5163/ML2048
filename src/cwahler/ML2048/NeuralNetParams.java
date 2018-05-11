@@ -6,7 +6,7 @@ public class NeuralNetParams {
     int numOutputs;
     int neuronsPerHiddenLayer;
     int bias;
-    public NeuralNetParams(int numLayers, int numInputs, int numOutputs, int neuronsPerHiddenLayer, double bias) {
+    public NeuralNetParams(int numLayers, int numInputs, int numOutputs, int neuronsPerHiddenLayer) {
         this.numLayers = numLayers;
         this.numInputs = numInputs;
         this.numOutputs = numOutputs;

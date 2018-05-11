@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Main {
@@ -21,7 +22,7 @@ public class Main {
     }
 
     //General Parameters
-    private static boolean humanPlayer = true;
+    private static boolean humanPlayer = false;
 
     //Game Parameters
     private static int score = 0;
@@ -73,9 +74,50 @@ public class Main {
             System.out.println("Quitting...");
         } else {
             nParams = new NeuralNetParams(3, size*size, 1, 4);
-            gParams = new GeneticAlgParams(100, .05, .01, .4);
+            gParams = new GeneticAlgParams(1, .05, .01, .4);
 
             pop = new Population(nParams, gParams);
+            pop.print(0);
+
+            int numMovesAllowed = 100;
+
+            newGame();
+            printBoard();
+            for(int rep = 0; rep < numMovesAllowed; rep ++) {
+
+                List<Double> in = new ArrayList<>();
+                for(Tile t : grid) {
+                    in.add(((double)t.number));
+                }
+
+                List<List<Double>>  out;
+                try {
+
+
+
+                    out = pop.update(in);
+                    System.out.println("Output: "+ out);
+                    Move move;
+                    if(out.get(0).get(0) < .25d) {
+                        move = Move.LEFT;
+                    } else if(out.get(0).get(0) < .5d) {
+                        move = Move.RIGHT;
+                    } else if(out.get(0).get(0) < .75d) {
+                        move = Move.UP;
+                    } else {
+                        move = Move.DOWN;
+                    }
+                    System.out.println("CHOSEN MOVE-> " + move);
+                    update(move);
+                    printBoard();
+
+
+
+                } catch(NeuralNetworkException e) {
+                    e.printStackTrace();
+                }
+            }
+
 
         }
 
@@ -228,7 +270,7 @@ public class Main {
     }
 
     private void addNewNumber() {
-        ArrayList<Integer> arr = getOpenSpots();
+        List<Integer> arr = getOpenSpots();
         if (arr.size() > 0) {
             Random random = new Random();
             int ind = random.nextInt(arr.size());
@@ -304,7 +346,7 @@ public class Main {
                 grid[i*size+j] = new Tile(0);
             }
         }
-        ArrayList<Integer> openSpots = getOpenSpots();
+        List<Integer> openSpots = getOpenSpots();
         Random random = new Random();
 
 
@@ -318,8 +360,8 @@ public class Main {
         grid[pick2].number = num;
     }
 
-    private ArrayList<Integer> getOpenSpots() {
-        ArrayList<Integer> openSpots = new ArrayList<>();
+    private List<Integer> getOpenSpots() {
+        List<Integer> openSpots = new ArrayList<>();
         for(int i = 0; i < size*size; i++) {
             if(grid[i].equals(0)) {
                 openSpots.add(i);
