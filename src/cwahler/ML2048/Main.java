@@ -219,7 +219,7 @@ public class Main {
         if (arr.size() > 0) {
             Random random = new Random();
             int ind = random.nextInt(arr.size());
-            grid[ind].number = (random.nextInt(2) + 1) * 2;
+            grid[arr.get(ind)].number = (random.nextInt(2) + 1) * 2;
         }
     }
 
